@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project - Mahmoud Maan</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <ul class="nav-links">
+                <li><a href="../index.html#home">Home</a></li>
+                <li><a href="../index.html#experience">Experience</a></li>
+                <li><a href="../index.html#education">Education</a></li>
+                <li><a href="index.html">Projects</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <!-- VLM Fine-tuning -->
+        <div id="vlm-finetuning" class="project-panel" style="display:none">
+            <section class="content-section project-detail">
+                <a href="index.html" class="back-link">← Back to Projects</a>
+                
+                <h1>VLM Fine-tuning with Blind Judge Evaluation</h1>
+                
+                <div class="project-links">
+                    <a href="https://github.com/mahmoud-maan/VLM-ORPO-Finetuning-Blind-Judge" class="btn" target="_blank">View the project on GitHub</a>
+                </div>
+
+                <div class="project-image-hero">
+                    <img src="../assets/images/inferencegif.gif" alt="VLM Fine-tuning with Blind Judge Evaluation">
+                </div>
+
+                <div class="project-content">
+                    <h2>Overview</h2>
+                    <p>I fine-tuned a Vision-Language Model (VLM) using ORPO (Odds Ratio Preference Optimization) and then designed a custom evaluation framework to rigorously measure the improvement. The challenge wasn't just training the model, it was building a trustworthy way to evaluate it, which standard benchmarks don't provide out of the box.</p>
+
+                    <h2>What I Built</h2>
+                    <ul>
+                        <li><strong>ORPO fine-tuning pipeline:</strong> Applied preference optimization to LLaVA-Next (Mistral-7B) on the RLAIF-V dataset, training for 1,000 steps and achieving stable loss reduction from 3.0 to 1.5</li>
+                        <li><strong>Blind judge evaluation system:</strong> Designed an evaluation setup where GPT-4o-mini scores model outputs without knowing which response came from which model, eliminating the positional and label bias that plagues most LLM-as-judge setups</li>
+                        <li><strong>Comparative analysis:</strong> Ran both a standard (non-blind) and blind evaluation to expose the gap between biased and unbiased scoring, revealing how conventional evaluation overstates improvement</li>
+                        <li><strong>Interactive Gradio demo:</strong> Built a visual interface to test and compare base vs. fine-tuned model responses side by side</li>
+                    </ul>
+
+                    <h2>Key Technical Decision</h2>
+                    <p>Most projects stop at reporting a score improvement. I went a step further by questioning whether that improvement was real or an artifact of evaluation bias. By randomizing model identity in the judge prompt, I found the results were more balanced than the non-blind run suggested, the fine-tuned model still won (7.25 vs. 6.92), but the gap narrowed. This kind of methodological rigor is what separates reliable ML evaluation from inflated results.</p>
+
+                    <h2>Results</h2>
+                    <ul>
+                        <li><strong>Non-blind:</strong> Fine-tuned 7.58 vs. Base 6.43 — 9 wins out of 10 samples</li>
+                        <li><strong>Blind (unbiased):</strong> Fine-tuned 7.25 vs. Base 6.92 — 6 wins out of 10 samples</li>
+                    </ul>
+                    <p><strong>Read the full documentation of the project:</strong></p>
+                    <a href="https://github.com/mahmoud-maan/VLM-ORPO-Finetuning-Blind-Judge/blob/main/utils/documentation.pdf" target="_blank">PDF Documentation</a>
+
+                    <h2>Technologies & Tools</h2>
+                    <ul>
+                        <li><strong>Model:</strong> LLaVA-Next (Mistral-7B) with CLIP vision encoder</li>
+                        <li><strong>Training:</strong> PyTorch, Transformers, PEFT, TRL (ORPO trainer)</li>
+                        <li><strong>Evaluation:</strong> GPT-4o-mini as blind LLM judge</li>
+                        <li><strong>Interface:</strong> Gradio for interactive model comparison</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+        <!-- Multimodal RAG -->
+        <div id="multimodal-rag" class="project-panel" style="display:none">
+            <section class="content-section project-detail">
+                <a href="index.html" class="back-link">← Back to Projects</a>
+                
+                <h1>Vision-based Multimodal RAG System</h1>
+                
+                <div class="project-links">
+                    <a href="https://github.com/mahmoud-maan/Vision-Multimodal-RAG.git" class="btn" target="_blank">View the project on GitHub</a>
+                </div>
+
+                <div class="project-image-hero">
+                    <img src="../assets/images/colpali.webp" alt="ColPali Vision-based RAG Architecture">
+                </div>
+
+                <div class="project-content">
+                    <h2>Overview</h2>
+                    <p>I built a multimodal RAG system that can answer natural language queries about PDF documents, including charts, figures, and tables by treating each page as an image rather than extracting raw text. This sidesteps a fundamental limitation of traditional RAG pipelines, which discard visual layout and non-textual content during parsing.</p>
+
+                    <p>The system is grounded in the <a href="https://arxiv.org/abs/2407.01449" target="_blank">ColPali</a> method, which embeds document pages directly as visual patches using a vision language model, enabling retrieval that preserves the full visual context of each page.</p>
+
+                    <h2>What I Built</h2>
+                    <ul>
+                        <li><strong>End-to-end vision RAG pipeline:</strong> Designed and implemented the full system from PDF ingestion to final answer generation, indexing, retrieval, and LLM querying in a clean modular structure</li>
+                        <li><strong>Visual page indexing:</strong> Integrated <code>vidore/colqwen2-v0.1</code> via Byaldi to build a visual index from PDF pages, embedding each page as an image instead of extracted text</li>
+                        <li><strong>Multimodal answer generation:</strong> Connected the retrieval output to an OpenAI-compatible vision LLM, passing the top-k retrieved page images alongside the user query to produce grounded answers</li>
+                        <li><strong>Configurable design:</strong> Centralized all key parameters LLM endpoint, embedding model, query, number of retrieved pages in a single <code>config.py</code>, making the system easy to adapt to new documents and models</li>
+                    </ul>
+
+                    <h2>Key Technical Decision</h2>
+                    <p>Traditional RAG systems extract text from PDFs and embed it as strings, losing all visual structure. I deliberately chose a vision-first approach using ColPali, where the retriever never sees extracted text, it scores pages based on visual embeddings. This makes the system far more capable on real-world documents that mix text with figures, diagrams, and formatted tables.</p>
+
+                    <h2>Technologies & Tools</h2>
+                    <ul>
+                        <li><strong>Retrieval:</strong> ColQwen2 (<code>vidore/colqwen2-v0.1</code>) via Byaldi</li>
+                        <li><strong>Generation:</strong> OpenAI-compatible API with any vision-capable LLM</li>
+                        <li><strong>Stack:</strong> Python 3.10, Pillow, pdf2image, Poppler, Conda + CUDA</li>
+                    </ul>
+
+                    <h2>Resources</h2>
+                    <ul>
+                        <li><strong>GitHub Repository:</strong> <a href="https://github.com/mahmoud-maan/Vision-Multimodal-RAG.git" target="_blank">View Full Project</a></li>
+                        <li><strong>ColPali Paper:</strong> <a href="https://arxiv.org/abs/2407.01449" target="_blank">Efficient Document Retrieval with Vision Language Models</a></li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+        <!-- AI Procurement -->
+        <div id="ai-procurement" class="project-panel" style="display:none">
+            <section class="content-section project-detail">
+                <a href="index.html" class="back-link">← Back to Projects</a>
+                
+                <h1>Procurement AI Agents</h1>
+                
+                <div class="project-links">
+                    <a href="https://github.com/mahmoud-maan/AI-Procurement-Agents" class="btn" target="_blank">View the project on GitHub</a>
+                </div>
+
+                <div class="project-image-hero">
+                    <img src="../assets/images/ai-agent.avif" alt="Procurement AI Agents">
+                </div>
+
+                <div class="project-content">
+                    <h2>Overview</h2>
+                    <p>I built a multi-agent AI system that automates product research for procurement. The core problem it solves: manually searching across multiple e-commerce platforms, comparing specs and prices, and compiling findings into a report is tedious and inconsistent. I replaced that entire workflow with a pipeline of four specialized LLM agents that collaborate to go from a product request to a structured procurement report with no human steps in between.</p>
+
+                    <h2>What I Built</h2>
+                    <ul>
+                        <li><strong>Four-agent pipeline:</strong> Designed and orchestrated a multi-agent system using CrewAI where each agent has a distinct, scoped responsibility — query generation, search execution, data extraction, and report authoring — with structured outputs passed between them</li>
+                        <li><strong>Intelligent query formulation:</strong> Built a query generation agent powered by Llama 3.3-70B that takes a natural language product request and produces targeted search queries optimized for e-commerce discovery across platforms like Amazon, Otto, and MediaMarkt</li>
+                        <li><strong>Real-time product search:</strong> Integrated the Tavily API to run live searches and retrieve product listings, handling multi-platform results in a single pass</li>
+                        <li><strong>Structured web scraping:</strong> Connected ScrapeGraph to extract product specifications, pricing, and availability from raw e-commerce pages — turning unstructured HTML into clean, validated data using Pydantic schemas</li>
+                        <li><strong>Automated report generation:</strong> Implemented a report agent that takes the structured product data and compiles it into a professional HTML report with side-by-side comparisons and a final recommendation</li>
+                    </ul>
+
+                    <h2>Key Technical Decision</h2>
+                    <p>Rather than building a monolithic LLM prompt that tries to do everything, I decomposed the workflow into agents with single responsibilities. This made each step testable and replaceable independently — for example, swapping Tavily for a different search API or changing the scraping strategy doesn't break the rest of the pipeline. Using Pydantic for inter-agent data validation was critical to prevent malformed data from propagating silently through the chain.</p>
+
+                    <h2>Technologies & Tools</h2>
+                    <ul>
+                        <li><strong>Orchestration:</strong> CrewAI for multi-agent workflow management</li>
+                        <li><strong>LLMs:</strong> GPT-4o for reasoning and analysis, Llama 3.3-70B for query generation and report writing</li>
+                        <li><strong>Search:</strong> Tavily API for real-time multi-platform product search</li>
+                        <li><strong>Scraping:</strong> ScrapeGraph API for structured data extraction from e-commerce pages</li>
+                        <li><strong>Validation:</strong> Pydantic for structured, type-safe inter-agent outputs</li>
+                    </ul>
+
+                    <h2>Resources</h2>
+                    <ul>
+                        <li><strong>GitHub Repository:</strong> <a href="https://github.com/mahmoud-maan/AI-Procurement-Agents" target="_blank">View Full Project</a></li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+        <!-- LiDAR Detection -->
+        <div id="lidar-detection" class="project-panel" style="display:none">
+            <section class="content-section project-detail">
+                <a href="index.html" class="back-link">← Back to Projects</a>
+
+                <h1>LiDAR 3D Obstacle Detection on Point Cloud Data</h1>
+
+                <div class="project-links">
+                    <a href="https://github.com/mahmoud-maan/LiDAR-3D-Obstacle-Detection-on-Point-Cloud-Data.git" class="btn" target="_blank">View the project on GitHub</a>
+                </div>
+
+                <div class="project-image-hero">
+                    <img src="../assets/images/Lidar-ObstacleDetectionFPS.gif" alt="LiDAR 3D Obstacle Detection in action">
+                </div>
+
+                <div class="project-content">
+                    <h2>Overview</h2>
+                    <p>I built a complete LiDAR obstacle detection pipeline that processes raw 3D point cloud data from a LiDAR sensor and identifies road obstacles in real time, placing precise 3D bounding boxes around each detected object. The pipeline runs entirely in C++ using the Point Cloud Library (PCL) and handles a continuous stream of LiDAR frames from a simulated environment.</p>
+
+                    <h2>What I Built</h2>
+                    <ul>
+                        <li><strong>RANSAC-based road segmentation:</strong> Implemented a custom RANSAC algorithm from scratch to fit a plane through the point cloud and separate road points (inliers) from obstacle points (outliers) — giving the pipeline a clean, noise-resistant way to isolate the drivable surface before any object detection runs</li>
+                        <li><strong>Euclidean clustering with KDTree:</strong> Built a KDTree spatial index and implemented Euclidean clustering to group outlier points into individual obstacle clusters based on proximity thresholds — handling edge cases like partially occluded or fragmented objects (e.g. a truck split across front and rear clusters)</li>
+                        <li><strong>3D bounding box fitting:</strong> Wrapped each cluster in an axis-aligned 3D bounding box, making the detected obstacles directly usable downstream for tasks like trajectory prediction or collision avoidance</li>
+                        <li><strong>Real-time streaming pipeline:</strong> Wired the full segmentation → clustering → bounding box pipeline to process LiDAR point cloud frames continuously, visualized live in PCL's 3D viewer</li>
+                    </ul>
+
+                    <h2>Key Technical Decision</h2>
+                    <p>Rather than relying on PCL's built-in RANSAC and clustering implementations, I implemented both algorithms from scratch. This was intentional, where it gave me precise control over the fitting criteria and distance thresholds, and forced a deeper understanding of how these algorithms behave on real sensor noise. The KDTree implementation in particular made clustering significantly faster than a naive nearest-neighbor search on large point clouds.</p>
+
+                    <h2>Technologies & Tools</h2>
+                    <ul>
+                        <li><strong>Language:</strong> C++</li>
+                        <li><strong>Library:</strong> Point Cloud Library (PCL) for 3D data structures and visualization</li>
+                        <li><strong>Algorithms:</strong> Custom RANSAC for plane fitting, custom KDTree + Euclidean clustering for object grouping</li>
+                        <li><strong>Build:</strong> CMake on Ubuntu</li>
+                    </ul>
+
+                    <h2>Resources</h2>
+                    <ul>
+                        <li><strong>GitHub Repository:</strong> <a href="https://github.com/mahmoud-maan/LiDAR-3D-Obstacle-Detection-on-Point-Cloud-Data.git" target="_blank">View Full Project</a></li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+        <!-- Traffic Signs -->
+        <div id="traffic-signs" class="project-panel" style="display:none">
+            <section class="content-section project-detail">
+                <a href="index.html" class="back-link">← Back to Projects</a>
+
+                <h1>Traffic Signs Detection and Classification</h1>
+
+                <div class="project-links">
+                    <a href="https://github.com/mahmoud-maan/Traffic-Signs-Detection-and-Classification" class="btn" target="_blank">View the project on GitHub</a>
+                    <a href="https://github.com/mahmoud-maan/Traffic-Signs-Detection-and-Classification/blob/main/Paper-Traffic_Sign_Detection_and_Classification.pdf" class="btn" target="_blank">Read Research Paper</a>
+                </div>
+
+                <div class="project-image-hero">
+                    <img src="../assets/images/traffic-signs.jpg" alt="Traffic Signs Detection and Classification">
+                </div>
+
+                <div class="project-content">
+                    <h2>Overview</h2>
+                    <p>I developed and presented a two-stage traffic sign recognition system as part of the <strong>Technology of Autonomous Vehicles Students Seminar</strong>, co-authored with Hanju Chen, Summer Semester, 2022. Rather than treating detection and classification as one problem, I decomposed them into two purpose-built models, a CNN classifier for 43-class recognition and a YOLOv4 detector then integrated them into a unified pipeline capable of processing both images and video in real time.</p>
+
+                    <h2>What I Built</h2>
+                    <ul>
+                        <li><strong>CNN classifier from scratch:</strong> Designed and trained a custom convolutional neural network in TensorFlow on the GTSRB dataset (43 traffic sign classes), applying dropout regularization and batch normalization to push test accuracy to <strong>97.41%</strong> — handling the class imbalance and visual variation across sign categories</li>
+                        <li><strong>YOLOv4 detection model:</strong> Configured and trained YOLOv4 on the GTSDB dataset using the Darknet framework, achieving a <strong>64.7% mAP</strong> for localizing traffic signs in real-world scenes with varying scale, lighting, and occlusion</li>
+                        <li><strong>YOLO format data pipeline:</strong> Built custom data preparation notebooks to convert the original GTSDB annotations into YOLO format and extended detection from 4 to 43 classes by converting the CNN model's output schema to match YOLOv4's label structure</li>
+                        <li><strong>Integrated detection + classification pipeline:</strong> Combined both models using OpenCV so that detections from YOLOv4 are cropped and fed directly into the CNN classifier, producing end-to-end traffic sign recognition from raw images or video frames</li>
+                        <li><strong>Research paper:</strong> Documented the full methodology, dataset analysis, model architecture decisions, and results in a formal research paper presented at the autonomous vehicles seminar</li>
+                    </ul>
+
+                    <h2>Key Technical Decision</h2>
+                    <p>I deliberately kept detection and classification as separate models rather than using a single end-to-end detector. This gave each model a focused objective: YOLOv4 handles spatial localization across the full image, while the CNN focuses entirely on fine-grained visual discrimination between 43 sign classes. The tradeoff is added pipeline complexity, but the classifier's 97.41% accuracy on tightly cropped sign patches would be hard to match from a detector trained on full scenes with heavy background noise.</p>
+
+                    <h2>Results</h2>
+                    <ul>
+                        <li><strong>Classification accuracy:</strong> 97.41% on the GTSRB test set (43 classes)</li>
+                        <li><strong>Detection mAP:</strong> 64.7% on the GTSDB benchmark (YOLOv4)</li>
+                    </ul>
+
+                    <h2>Technologies & Tools</h2>
+                    <ul>
+                        <li><strong>Classification:</strong> TensorFlow, custom CNN with dropout and batch normalization</li>
+                        <li><strong>Detection:</strong> YOLOv4, Darknet framework</li>
+                        <li><strong>Integration:</strong> OpenCV for pipeline assembly and video processing</li>
+                        <li><strong>Datasets:</strong> GTSRB (classification), GTSDB (detection)</li>
+                    </ul>
+
+                    <h2>Resources</h2>
+                    <ul>
+                        <li><strong>GitHub Repository:</strong> <a href="https://github.com/mahmoud-maan/Traffic-Signs-Detection-and-Classification" target="_blank">View Full Project</a></li>
+                        <li><strong>Research Paper:</strong> <a href="https://github.com/mahmoud-maan/Traffic-Signs-Detection-and-Classification/blob/main/Paper-Traffic_Sign_Detection_and_Classification.pdf" target="_blank">Traffic Sign Detection and Classification (PDF)</a></li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+        <!-- SO-101 Robot ARM Teleoperation -->
+        <div id="so101-teleoperation" class="project-panel" style="display:none">
+            <section class="content-section project-detail">
+                <a href="index.html" class="back-link">← Back to Projects</a>
+
+                <h1>SO-101 Teleoperation</h1>
+
+                <div class="project-links">
+                    <a href="https://github.com/mahmoud-maan/SO-101-Teleoperation" class="btn" target="_blank">View the project on GitHub</a>
+                </div>
+                <br>
+
+                <div class="project-content">
+                    <p>Python scripts for leader-follower teleoperation of the <strong>SO-101</strong> 6-DOF robot arm using Feetech STS/SMS series servos.</p>
+                    <p>The leader arm (passive, hand-held) is detected automatically by its lower supply voltage (~5 V).<br>
+                    The follower arm (powered, ~12 V) mirrors the leader's joint positions in real-time.</p>
+
+                    <hr>
+
+                    <h2>Joint Map</h2>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Joint</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>1</td><td>shoulder_pan</td></tr>
+                            <tr><td>2</td><td>shoulder_lift</td></tr>
+                            <tr><td>3</td><td>elbow_flex</td></tr>
+                            <tr><td>4</td><td>wrist_flex</td></tr>
+                            <tr><td>5</td><td>wrist_roll</td></tr>
+                            <tr><td>6</td><td>gripper</td></tr>
+                        </tbody>
+                    </table>
+
+                    <hr>
+
+                    <h2>Demo</h2>
+
+                    <img src="../assets/images/SO-101-Teleoperation/teleop-example.gif" alt="Teleoperation Example">
+
+                    <h2>Requirements</h2>
+
+                    <ul>
+                        <li>Python 3.10+</li>
+                        <li><a href="https://github.com/vassar-robotics/feetech-servo-sdk" target="_blank">vassar-feetech-servo-sdk</a></li>
+                        <li>Two USB-to-Serial adapters (one per arm)</li>
+                    </ul>
+
+                    <p>Install dependencies:</p>
+<pre><code>pip install -r requirements.txt</code></pre>
+
+                    <hr>
+
+                    <h2>Setup</h2>
+
+                    <h3>1. Find Serial Ports</h3>
+
+                    <p>Plug in both arms and run:</p>
+<pre><code>python find_ports.py</code></pre>
+
+                    <p>Note the two port paths (e.g. <code>/dev/ttyACM0</code>, <code>/dev/ttyACM1</code>).</p>
+
+                    <h3>2. Calibrate</h3>
+
+                    <p>Calibrate each arm <strong>once</strong> before first use. This sets the current physical position as the servo neutral (raw value 2048).</p>
+<pre><code># Leader arm
+python calibrate.py --leader /dev/ttyACM0
+
+# Follower arm
+python calibrate.py --follower /dev/ttyACM1</code></pre>
+
+                    <p>Hold each arm in its desired home position before pressing Enter when prompted.</p>
+
+                    <h3>3. Teleoperate</h3>
+
+                    <p>Connect both arms and run:</p>
+<pre><code>python teleoperate.py</code></pre>
+
+                    <p>The script auto-detects which arm is the leader and which is the follower based on supply voltage.</p>
+
+                    <p><strong>Options:</strong></p>
+<pre><code>--frequency HZ     Control loop frequency (default: 200 Hz)
+--no-print         Suppress per-cycle position output</code></pre>
+
+                    <p>Example:</p>
+<pre><code>python teleoperate.py --frequency 100 --no-print</code></pre>
+
+                    <hr>
+
+                    <h2>Configuration</h2>
+
+                    <p>All shared constants (servo IDs, names, type, voltage threshold, default frequency) live in <code>config.py</code>.</p>
+
+                    <hr>
+
+                    <h2>Project Structure</h2>
+
+<pre><code>SO-101-Teleoperation/
+├── config.py          # Shared constants (servo IDs, names, thresholds)
+├── teleoperate.py     # Main leader-follower teleoperation loop
+├── calibrate.py       # One-time arm calibration utility
+├── find_ports.py      # Scan and list connected servo ports
+├── requirements.txt
+└── README.md</code></pre>
+                </div>
+            </section>
+        </div>
+
+        <!-- Imitation Learning with VLA Models -->
+        <div id="imitation-learning" class="project-panel" style="display:none">
+            <section class="content-section project-detail">
+                <a href="index.html" class="back-link">← Back to Projects</a>
+
+                <h1>The SO-101 Robotic System — Imitation Learning with VLA Models</h1>
+
+                <div class="project-content">
+                    <p>To further explore imitation learning, I've been working with the <strong>SO-101 Kit</strong>, an open-source project from HuggingFace. This setup is designed to test the limits of <strong>Vision-Language-Action (VLA)</strong> models in a controlled environment. In this project I fine-tuned two models to conduct a <strong>pick-and-place task</strong>: SmolVLA and ACT.</p>
+                    <br>
+                    <p><strong>My Collected Human Demonstritation Datasets:</strong></p>
+                    <ul>
+                        <li>🗂️ Old setup data: <a href="https://huggingface.co/datasets/maanm/pick-place-00" target="_blank">maanm/pick-place-00</a></li>
+                        <li>🗂️ New setup data: <a href="https://huggingface.co/datasets/maanm/pick-place-01" target="_blank">maanm/pick-place-01</a></li>
+                        <li>📊 Visualize the dataset: <a href="https://huggingface.co/spaces/lerobot/visualize_dataset" target="_blank">LeRobot Dataset Visualizer</a></li>
+                        <li>🤗 Models: <a href="https://huggingface.co/maanm" target="_blank">huggingface.co/maanm</a></li>
+                    </ul>
+
+                    <hr>
+
+                    <h2>Hardware Setup</h2>
+
+                    <img src="../assets/images/IL-Project/robots-setup.png" alt="SO-101 Robot Setup">
+                    <blockquote><em>Open-source SO-101 Arm Kit from HuggingFace — annotated hardware components.</em></blockquote>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Component</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Leader Arm</strong></td>
+                                <td>Input device for human demonstrations</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Follower Arm</strong></td>
+                                <td>Primary 5-DOF manipulator executing the task</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Top-Front Camera</strong></td>
+                                <td>Provides global spatial context for scene understanding</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Wrist Camera</strong></td>
+                                <td>Mounted on the end-effector to mitigate occlusions and provide precise local visual feedback</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p>The architecture uses a <strong>1:1 teleoperation mapping</strong>. By moving the leader arm, the operator generates the haptic-visual pairs necessary for the dataset. This leader-follower synergy ensures that the proprioceptive data from the follower is perfectly aligned with the visual demonstrations.</p>
+
+                    <hr>
+
+                    <h2>Old Setup — Identified Problems</h2>
+
+                    <img src="../assets/images/IL-Project/act-old.gif" alt="ACT Old Setup Inference">
+                    <blockquote><em>ACT inference on the old setup, the picking task fails.</em></blockquote>
+
+                    <p>The old setup suffered from several issues that hindered model performance and capped the ACT model at a baseline of <strong>3x inference speed</strong>:</p>
+                    <ul>
+                        <li><strong>Bad lighting &amp; inconsistent backgrounds</strong> — introduced high-frequency noise, making feature extraction unstable</li>
+                        <li><strong>Camera angle variability</strong> — slight shifts in the top camera resulted in coordinate mapping errors</li>
+                        <li><strong>Proprioceptive misalignment</strong> — the operator was teleoperating by looking directly at the follower arm, creating a distribution shift since the operator's control decisions were decoupled from the camera's perspective — the only reality the model actually "sees"</li>
+                    </ul>
+
+                    <p>These factors effectively broke the visual feedback loop, leading to spatial distribution shifts that the model could not generalize during autonomous inference.</p>
+
+                    <hr>
+
+                    <h2>Teleoperation Methodology</h2>
+
+                    <img src="../assets/images/IL-Project/teleoperation.gif" alt="Teleoperation">
+                    <blockquote><em>Teleoperation session, operating the leader arm while watching exclusively through the camera feeds on the monitor.</em></blockquote>
+
+                    <p>To fix the old setup issues, I implemented a refined methodology:</p>
+                    <ul>
+                        <li><strong>Standardized the lighting</strong> across all recording sessions</li>
+                        <li><strong>Viewed the workspace exclusively through the visual feed</strong> (the monitor), ensuring that the demonstration data perfectly matched the model's inference environment</li>
+                    </ul>
+
+                    <p>This creates the high-fidelity feedback loop required for successful imitation learning.</p>
+
+                    <hr>
+
+                    <h2>Model Inference &amp; Performance</h2>
+
+                    <h3>SmolVLA</h3>
+
+                    <img src="../assets/images/IL-Project/SmolVLA-inference.gif" alt="SmolVLA Inference">
+                    <blockquote><em>SmolVLA inference, the robot successfully completes the pick-and-place task. Note: when the bowl is moved to a new position at the end, the robot fails, this is an out-of-distribution scenario not seen during training.</em></blockquote>
+
+                    <hr>
+
+                    <h3>SmolVLA — Picking Purple Side</h3>
+
+                    <img src="../assets/images/IL-Project/SmolVLA-inference-purple.gif" alt="SmolVLA Inference - Picking Purple Side">
+                    <blockquote><em>SmolVLA inference, the robot successfully picks the <strong>purple side</strong> of the cube, a color variant not present in the training data. This demonstrates SmolVLA's ability to ground linguistic instructions in visual space.</em></blockquote>
+
+                    <hr>
+
+                    <h3>ACT Model</h3>
+
+                    <img src="../assets/images/IL-Project/ACT.gif" alt="ACT Model Inference">
+                    <blockquote><em>ACT model inference, the robot struggles with the pick but ultimately succeeds with minor human assistance.</em></blockquote>
+
+                    <hr>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Mahmoud Maan. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const titles = {
+            'so101-teleoperation': 'SO-101 Robot ARM Teleoperation - Mahmoud Maan',
+            'imitation-learning': 'Imitation Learning with VLA Models - Mahmoud Maan',
+            'vlm-finetuning':  'VLM Fine-tuning with Blind Judge Evaluation - Mahmoud Maan',
+            'multimodal-rag':  'Vision-based Multimodal RAG System - Mahmoud Maan',
+            'ai-procurement':  'Multi-agentic AI for Procurement System - Mahmoud Maan',
+            'lidar-detection': 'LiDAR 3D Obstacle Detection - Mahmoud Maan',
+            'traffic-signs':   'Traffic Signs Detection and Classification - Mahmoud Maan'
+        };
+
+        function showProject(hash) {
+            document.querySelectorAll('.project-panel').forEach(function(panel) {
+                panel.style.display = 'none';
+            });
+            var panel = document.getElementById(hash);
+            if (panel) {
+                panel.style.display = 'block';
+                document.title = titles[hash] || 'Project - Mahmoud Maan';
+            }
+        }
+
+        var hash = window.location.hash.slice(1);
+        if (hash) showProject(hash);
+
+        window.addEventListener('hashchange', function() {
+            showProject(window.location.hash.slice(1));
+        });
+    </script>
+</body>
+</html>
