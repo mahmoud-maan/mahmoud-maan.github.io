@@ -29,6 +29,8 @@
                 
                 <div class="project-links">
                     <a href="https://github.com/mahmoud-maan/VLM-ORPO-Finetuning-Blind-Judge" class="btn" target="_blank">View the project on GitHub</a>
+                    <a href="https://github.com/mahmoud-maan/VLM-ORPO-Finetuning-Blind-Judge/blob/main/utils/documentation.pdf" class="btn" target="_blank">Read full documentation</a>
+
                 </div>
 
                 <div class="project-image-hero">
@@ -220,7 +222,7 @@
 
                 <div class="project-links">
                     <a href="https://github.com/mahmoud-maan/Traffic-Signs-Detection-and-Classification" class="btn" target="_blank">View the project on GitHub</a>
-                    <a href="https://github.com/mahmoud-maan/Traffic-Signs-Detection-and-Classification/blob/main/Paper-Traffic_Sign_Detection_and_Classification.pdf" class="btn" target="_blank">Read Research Paper</a>
+                    <a href="https://github.com/mahmoud-maan/Traffic-Signs-Detection-and-Classification/blob/main/Paper-Traffic_Sign_Detection_and_Classification.pdf" class="btn" target="_blank">Read Research Report</a>
                 </div>
 
                 <div class="project-image-hero">
@@ -237,7 +239,7 @@
                         <li><strong>YOLOv4 detection model:</strong> Configured and trained YOLOv4 on the GTSDB dataset using the Darknet framework, achieving a <strong>64.7% mAP</strong> for localizing traffic signs in real-world scenes with varying scale, lighting, and occlusion</li>
                         <li><strong>YOLO format data pipeline:</strong> Built custom data preparation notebooks to convert the original GTSDB annotations into YOLO format and extended detection from 4 to 43 classes by converting the CNN model's output schema to match YOLOv4's label structure</li>
                         <li><strong>Integrated detection + classification pipeline:</strong> Combined both models using OpenCV so that detections from YOLOv4 are cropped and fed directly into the CNN classifier, producing end-to-end traffic sign recognition from raw images or video frames</li>
-                        <li><strong>Research paper:</strong> Documented the full methodology, dataset analysis, model architecture decisions, and results in a formal research paper presented at the autonomous vehicles seminar</li>
+                        <li><strong>Research report:</strong> Documented the full methodology, dataset analysis, model architecture decisions, and results in a formal research paper presented at the autonomous vehicles seminar</li>
                     </ul>
 
                     <h2>Key Technical Decision</h2>
@@ -260,7 +262,62 @@
                     <h2>Resources</h2>
                     <ul>
                         <li><strong>GitHub Repository:</strong> <a href="https://github.com/mahmoud-maan/Traffic-Signs-Detection-and-Classification" target="_blank">View Full Project</a></li>
-                        <li><strong>Research Paper:</strong> <a href="https://github.com/mahmoud-maan/Traffic-Signs-Detection-and-Classification/blob/main/Paper-Traffic_Sign_Detection_and_Classification.pdf" target="_blank">Traffic Sign Detection and Classification (PDF)</a></li>
+                        <li><strong>Research report:</strong> <a href="https://github.com/mahmoud-maan/Traffic-Signs-Detection-and-Classification/blob/main/Paper-Traffic_Sign_Detection_and_Classification.pdf" target="_blank">Traffic Sign Detection and Classification (PDF)</a></li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+        <!-- VR Hand Pose Tracking to ROS 2 Bridge -->
+        <div id="vr-hand-bridge" class="project-panel" style="display:none">
+            <section class="content-section project-detail">
+                <a href="index.html" class="back-link">← Back to Projects</a>
+
+                <h1>VR Hand Pose Tracking to ROS 2 Bridge</h1>
+
+                <div class="project-links">
+                    <a href="https://github.com/mahmoud-maan/VR-hand-bridge-ROS2.git" class="btn" target="_blank">View the project on GitHub</a>
+                </div>
+
+                <a href="https://youtu.be/SYDdUW7kL2k" target="_blank" class="project-video-hero" aria-label="Watch VR Hand Pose Tracking to ROS 2 Bridge on YouTube">
+                    <img src="https://img.youtube.com/vi/SYDdUW7kL2k/maxresdefault.jpg" alt="VR Hand Pose Tracking to ROS 2 Bridge — click to watch on YouTube">
+                    <div class="yt-play-btn" aria-hidden="true">
+                        <svg viewBox="0 0 68 48" width="68" height="48">
+                            <path d="M66.5 7.7A8.5 8.5 0 0 0 60.7 2C55.4.5 34 .5 34 .5S12.6.5 7.3 2A8.5 8.5 0 0 0 1.5 7.7C0 13 0 24 0 24s0 11 1.5 16.3A8.5 8.5 0 0 0 7.3 46C12.6 47.5 34 47.5 34 47.5s21.4 0 26.7-1.5a8.5 8.5 0 0 0 5.8-5.7C68 35 68 24 68 24s0-11-1.5-16.3z" fill="#ff0000"/>
+                            <path d="M27 34l18-10-18-10v20z" fill="#fff"/>
+                        </svg>
+                    </div>
+                </a>
+
+                <div class="project-content">
+                    <h2>Overview</h2>
+                    <p>A <strong>Meta Quest 3</strong> XR application built in <strong>Godot 4.6</strong> that streams real-time hand/controller tracking data (position + orientation) over WebSocket to a <strong>ROS 2</strong> pipeline on a host computer, where poses are visualised in <strong>RViz2</strong>. The project is a self-contained bridge between a VR headset and ROS 2, intended as a foundation for downstream applications such as robot teleoperation.</p>
+
+                    <h2>Architecture</h2>
+                    <p>The system has two main components that communicate over Wi-Fi:</p>
+                    <ul>
+                        <li><strong>Godot app (Meta Quest 3):</strong> Reads both hand/controller transforms every frame via OpenXR, packages position and orientation as a JSON WebSocket message, and streams it to the host on port 8765</li>
+                        <li><strong>ROS 2 node <code>hand_ws_publisher</code>:</strong> Receives the JSON frames, remaps the coordinate frame from Godot's Y-up convention to ROS REP-103 Z-up convention, and publishes <code>geometry_msgs/PoseStamped</code> on <code>/left_hand_pose</code> and <code>/right_hand_pose</code></li>
+                    </ul>
+                    <p>A companion <code>hand_pose_subscriber</code> node prints pose data to the console, and a pre-configured RViz2 launch renders both hands as live 3-axis coordinate frames.</p>
+
+                    <h2>Key Technical Decision</h2>
+                    <p>Godot and ROS use fundamentally different world coordinate systems (Y-up vs. Z-up). Rather than leaving this as a per-consumer problem, the coordinate remapping is applied centrally in <code>hand_ws_publisher.py</code> so every downstream ROS node receives correctly framed data without extra work. Both position and quaternion orientation are converted using a fixed rotation quaternion.</p>
+
+                    <h2>Message Format</h2>
+                    <p>Each WebSocket frame is a JSON object carrying both hands simultaneously:</p>
+<pre><code>{
+  "left_hand":  { "pos": [x, y, z], "quat": [x, y, z, w] },
+  "right_hand": { "pos": [x, y, z], "quat": [x, y, z, w] }
+}</code></pre>
+                    <p>Position is in metres (Godot world space, Y-up) and orientation is a unit quaternion in Godot world space. The publisher node transparently converts both into ROS REP-103 before publishing.</p>
+
+                    <h2>Technologies & Tools</h2>
+                    <ul>
+                        <li><strong>VR Runtime:</strong> Godot 4.6 with Godot OpenXR Vendors plugin, deployed as an Android APK on Meta Quest 3</li>
+                        <li><strong>Communication:</strong> WebSocket over local Wi-Fi (port 8765), JSON message format</li>
+                        <li><strong>ROS 2:</strong> Jazzy — <code>geometry_msgs/PoseStamped</code>, launch files, RViz2 for live 3-axis visualisation</li>
+                        <li><strong>Language:</strong> GDScript (Godot), Python 3 (ROS 2 nodes), <code>websockets</code> library</li>
                     </ul>
                 </div>
             </section>
@@ -501,6 +558,7 @@ python calibrate.py --follower /dev/ttyACM1</code></pre>
 
     <script>
         const titles = {
+            'vr-hand-bridge':      'VR Hand Pose Tracking to ROS 2 Bridge - Mahmoud Maan',
             'so101-teleoperation': 'SO-101 Robot ARM Teleoperation - Mahmoud Maan',
             'imitation-learning': 'Imitation Learning with VLA Models - Mahmoud Maan',
             'vlm-finetuning':  'VLM Fine-tuning with Blind Judge Evaluation - Mahmoud Maan',
