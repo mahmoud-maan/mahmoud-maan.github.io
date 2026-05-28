@@ -268,6 +268,105 @@
             </section>
         </div>
 
+        <!-- VR Teleoperation for SO-101 — VRTeleop -->
+        <div id="vr-teleop" class="project-panel" style="display:none">
+            <section class="content-section project-detail">
+                <a href="index.html" class="back-link">← Back to Projects</a>
+
+                <h1>VR Teleoperation for SO-101 — VRTeleop</h1>
+
+                <div class="project-links">
+                    <a href="https://github.com/mahmoud-maan/vr-teleop" class="btn" target="_blank">Server — vr-teleop</a>
+                    <a href="https://github.com/mahmoud-maan/vr-teleop-quest-app" class="btn" target="_blank">Quest Client — vr-teleop-quest-app</a>
+                </div>
+
+                <a href="https://youtu.be/IPGkxzw_RAY" target="_blank" class="project-video-hero" aria-label="Watch Quest XR app demo on YouTube">
+                    <img src="https://img.youtube.com/vi/IPGkxzw_RAY/maxresdefault.jpg" alt="Quest XR app — UI, cameras & episode recording">
+                    <div class="yt-play-btn" aria-hidden="true">
+                        <svg viewBox="0 0 68 48" width="68" height="48">
+                            <path d="M66.5 7.7A8.5 8.5 0 0 0 60.7 2C55.4.5 34 .5 34 .5S12.6.5 7.3 2A8.5 8.5 0 0 0 1.5 7.7C0 13 0 24 0 24s0 11 1.5 16.3A8.5 8.5 0 0 0 7.3 46C12.6 47.5 34 47.5 34 47.5s21.4 0 26.7-1.5a8.5 8.5 0 0 0 5.8-5.7C68 35 68 24 68 24s0-11-1.5-16.3z" fill="#ff0000"/>
+                            <path d="M27 34l18-10-18-10v20z" fill="#fff"/>
+                        </svg>
+                    </div>
+                </a>
+                <p class="video-caption"><em>Quest XR app — UI, live camera feeds & episode recording</em></p>
+
+                <div class="project-content">
+                    <h2>Overview</h2>
+                    <p>VR teleoperation system for the <strong>SO-101</strong> robot arm, split across two repositories. A <strong>Meta Quest 3</strong> Godot 4 XR app tracks 6-DoF controller poses and streams them over WebSocket to a Python server that remaps coordinates, runs an IK pipeline, and drives the arm hardware in real time. Robot camera feeds are streamed back to the headset over MJPEG, and the system can record <strong>LeRobot datasets</strong> format directly from VR, enabling data collection for imitation learning without leaving the headset.</p>
+
+                    <h2>What I Built</h2>
+                    <ul>
+                        <li><strong>Meta Quest 3 Godot XR client:</strong> OpenXR app with floating control panels, live MJPEG camera display, and dataset recording UI (Record / Save Episode / Save Dataset buttons). APK published as a GitHub Release</li>
+                        <li><strong>Python IK server:</strong> Staged pipeline — Godot→robot coordinate remap → reference/delta pose → bounds enforcement → gripper velocity → URDF-backed IK solver → Feetech servo hardware. Single and dual arm configs via YAML</li>
+                        <li><strong>MJPEG camera server:</strong> Streams robot-mounted cameras back to the headset in real time, with snapshot and stream endpoints consumed directly inside the XR app</li>
+                        <li><strong>LeRobot dataset recording:</strong> Episode recording is gated on Quest controller actions, grip to teleoperate, buttons to start/stop episodes and push to HuggingFace Hub</li>
+                    </ul>
+
+                    <h2>Demos</h2>
+                    <div class="video-grid">
+                        <div>
+                            <a href="https://youtube.com/shorts/K2bBe69DNB4" target="_blank" class="project-video-hero" aria-label="Watch teleoperation demo 1">
+                                <img src="https://img.youtube.com/vi/K2bBe69DNB4/maxresdefault.jpg" alt="Teleoperation demo 1">
+                                <div class="yt-play-btn" aria-hidden="true">
+                                    <svg viewBox="0 0 68 48" width="68" height="48">
+                                        <path d="M66.5 7.7A8.5 8.5 0 0 0 60.7 2C55.4.5 34 .5 34 .5S12.6.5 7.3 2A8.5 8.5 0 0 0 1.5 7.7C0 13 0 24 0 24s0 11 1.5 16.3A8.5 8.5 0 0 0 7.3 46C12.6 47.5 34 47.5 34 47.5s21.4 0 26.7-1.5a8.5 8.5 0 0 0 5.8-5.7C68 35 68 24 68 24s0-11-1.5-16.3z" fill="#ff0000"/>
+                                        <path d="M27 34l18-10-18-10v20z" fill="#fff"/>
+                                    </svg>
+                                </div>
+                            </a>
+                            <p class="video-caption"><em></em></p>
+                        </div>
+                        <div>
+                            <a href="https://youtube.com/shorts/xTZUCrEGbr8" target="_blank" class="project-video-hero" aria-label="Watch teleoperation demo 2">
+                                <img src="https://img.youtube.com/vi/xTZUCrEGbr8/maxresdefault.jpg" alt="Teleoperation demo 2">
+                                <div class="yt-play-btn" aria-hidden="true">
+                                    <svg viewBox="0 0 68 48" width="68" height="48">
+                                        <path d="M66.5 7.7A8.5 8.5 0 0 0 60.7 2C55.4.5 34 .5 34 .5S12.6.5 7.3 2A8.5 8.5 0 0 0 1.5 7.7C0 13 0 24 0 24s0 11 1.5 16.3A8.5 8.5 0 0 0 7.3 46C12.6 47.5 34 47.5 34 47.5s21.4 0 26.7-1.5a8.5 8.5 0 0 0 5.8-5.7C68 35 68 24 68 24s0-11-1.5-16.3z" fill="#ff0000"/>
+                                        <path d="M27 34l18-10-18-10v20z" fill="#fff"/>
+                                    </svg>
+                                </div>
+                            </a>
+                            <p class="video-caption"><em></em></p>
+                        </div>
+                        <div>
+                            <a href="https://youtube.com/shorts/g5Xc0eIgyuE" target="_blank" class="project-video-hero" aria-label="Watch pick-and-place recording 1">
+                                <img src="https://img.youtube.com/vi/g5Xc0eIgyuE/maxresdefault.jpg" alt="Pick-and-place dataset recording 1">
+                                <div class="yt-play-btn" aria-hidden="true">
+                                    <svg viewBox="0 0 68 48" width="68" height="48">
+                                        <path d="M66.5 7.7A8.5 8.5 0 0 0 60.7 2C55.4.5 34 .5 34 .5S12.6.5 7.3 2A8.5 8.5 0 0 0 1.5 7.7C0 13 0 24 0 24s0 11 1.5 16.3A8.5 8.5 0 0 0 7.3 46C12.6 47.5 34 47.5 34 47.5s21.4 0 26.7-1.5a8.5 8.5 0 0 0 5.8-5.7C68 35 68 24 68 24s0-11-1.5-16.3z" fill="#ff0000"/>
+                                        <path d="M27 34l18-10-18-10v20z" fill="#fff"/>
+                                    </svg>
+                                </div>
+                            </a>
+                            <p class="video-caption"><em></em></p>
+                        </div>
+                        <div>
+                            <a href="https://youtube.com/shorts/8zyT9PPxsrM" target="_blank" class="project-video-hero" aria-label="Watch pick-and-place recording 2">
+                                <img src="https://img.youtube.com/vi/8zyT9PPxsrM/maxresdefault.jpg" alt="Pick-and-place dataset recording 2">
+                                <div class="yt-play-btn" aria-hidden="true">
+                                    <svg viewBox="0 0 68 48" width="68" height="48">
+                                        <path d="M66.5 7.7A8.5 8.5 0 0 0 60.7 2C55.4.5 34 .5 34 .5S12.6.5 7.3 2A8.5 8.5 0 0 0 1.5 7.7C0 13 0 24 0 24s0 11 1.5 16.3A8.5 8.5 0 0 0 7.3 46C12.6 47.5 34 47.5 34 47.5s21.4 0 26.7-1.5a8.5 8.5 0 0 0 5.8-5.7C68 35 68 24 68 24s0-11-1.5-16.3z" fill="#ff0000"/>
+                                        <path d="M27 34l18-10-18-10v20z" fill="#fff"/>
+                                    </svg>
+                                </div>
+                            </a>
+                            <p class="video-caption"><em></em></p>
+                        </div>
+                    </div>
+
+                    <h2>Tools</h2>
+                    <ul>
+                        <li><strong>Headset client:</strong> Godot 4.6, OpenXR, GDScript — deployed as Android APK on Meta Quest 3</li>
+                        <li><strong>Server:</strong> Python 3, uv, WebSocket, MJPEG HTTP server, URDF-backed IK solver</li>
+                        <li><strong>Robot hardware:</strong> SO-101 6-DoF arm with Feetech servos, single and dual-arm configs</li>
+                        <li><strong>Data pipeline:</strong> LeRobot dataset recording with HuggingFace Hub push</li>
+                    </ul>
+                    <h2>For more details, please visit the <a href="https://github.com/mahmoud-maan/vr-teleop" target="_blank">vr-teleop</a> and <a href="https://github.com/mahmoud-maan/vr-teleop-quest-app" target="_blank">vr-teleop-quest-app</a> repositories.</h2>
+                </div>
+            </section>
+        </div>
+
         <!-- VR Hand Pose Tracking to ROS 2 Bridge -->
         <div id="vr-hand-bridge" class="project-panel" style="display:none">
             <section class="content-section project-detail">
@@ -558,6 +657,7 @@ python calibrate.py --follower /dev/ttyACM1</code></pre>
 
     <script>
         const titles = {
+            'vr-teleop':           'VR Teleoperation for SO-101 — VRTeleop - Mahmoud Maan',
             'vr-hand-bridge':      'VR Hand Pose Tracking to ROS 2 Bridge - Mahmoud Maan',
             'so101-teleoperation': 'SO-101 Robot ARM Teleoperation - Mahmoud Maan',
             'imitation-learning': 'Imitation Learning with VLA Models - Mahmoud Maan',
