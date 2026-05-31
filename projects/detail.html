@@ -268,6 +268,60 @@
             </section>
         </div>
 
+        <!-- 6D Pose Estimation of QR Codes using Godot 4 and OpenXR -->
+        <div id="qr-code-pose-tracking" class="project-panel" style="display:none">
+            <section class="content-section project-detail">
+                <a href="index.html" class="back-link">← Back to Projects</a>
+
+                <h1>6D Pose Estimation of QR Codes using Godot 4 and OpenXR</h1>
+
+                <div class="project-links">
+                    <a href="https://github.com/mahmoud-maan/QR-codes-6D-pose-tracking.git" class="btn" target="_blank">View the project on GitHub</a>
+                </div>
+
+                <a href="https://youtu.be/5VZgpgfYNjM" target="_blank" class="project-video-hero" aria-label="Watch QR code 6D pose tracking demo on YouTube">
+                    <img src="https://img.youtube.com/vi/5VZgpgfYNjM/maxresdefault.jpg" alt="QR code 6D pose tracking demo">
+                    <div class="yt-play-btn" aria-hidden="true">
+                        <svg viewBox="0 0 68 48" width="68" height="48">
+                            <path d="M66.5 7.7A8.5 8.5 0 0 0 60.7 2C55.4.5 34 .5 34 .5S12.6.5 7.3 2A8.5 8.5 0 0 0 1.5 7.7C0 13 0 24 0 24s0 11 1.5 16.3A8.5 8.5 0 0 0 7.3 46C12.6 47.5 34 47.5 34 47.5s21.4 0 26.7-1.5a8.5 8.5 0 0 0 5.8-5.7C68 35 68 24 68 24s0-11-1.5-16.3z" fill="#ff0000"/>
+                            <path d="M27 34l18-10-18-10v20z" fill="#fff"/>
+                        </svg>
+                    </div>
+                </a>
+                <p class="video-caption"><em>Quest 3 passthrough demo — QR marker pose visualized with RGB axes</em></p>
+
+                <div class="project-content">
+                    <h2>Overview</h2>
+                    <p>A Meta Quest 3 mixed-reality demo built with <strong>Godot 4</strong> and <strong>OpenXR</strong> for estimating the 6D pose of QR codes in passthrough. When the headset detects a marker, the app overlays RGB coordinate axes at the marker pose and displays live world-space coordinates.</p>
+
+                    <h2>How It Works</h2>
+                    <ul>
+                        <li><strong>Runtime marker tracking:</strong> QR detection and 6D pose estimation are handled by the Quest/OpenXR runtime, not custom computer vision inside Godot</li>
+                        <li><strong>Godot bridge:</strong> Godot listens to <code>XRServer</code> tracker events and filters QR markers exposed as <code>OpenXRMarkerTracker</code> objects</li>
+                        <li><strong>Dynamic anchors:</strong> Each detected marker gets an <code>XRAnchor3D</code> plus a coordinate display scene, and the anchor is removed automatically when the marker is lost</li>
+                        <li><strong>Multiple markers:</strong> More than one QR code can be tracked, with each marker receiving its own coordinate axes and live X/Y/Z labels</li>
+                    </ul>
+
+                    <h2>Key Takeaway</h2>
+                    <p>The important lesson was that 6D pose tracking comes from OpenXR's spatial entity and marker tracking extensions. Godot's role is to subscribe to tracker updates and visualize them cleanly using <code>XRAnchor3D</code>, which avoids manual pose update logic in the application code.</p>
+
+                    <h2>Limitations</h2>
+                    <ul>
+                        <li>Pose updates are not low-latency enough for fast-moving markers</li>
+                        <li>Detection works best with large QR codes, short viewing distance, and good lighting</li>
+                        <li>The approach is better suited for static reference markers, MR prototyping, and calibration workflows than high-speed tracking</li>
+                    </ul>
+
+                    <h2>Technologies & Tools</h2>
+                    <ul>
+                        <li><strong>XR stack:</strong> Meta Quest 3, Godot 4.6+, OpenXR, passthrough, OpenXR spatial entity marker tracking</li>
+                        <li><strong>Godot nodes:</strong> <code>XRServer</code>, <code>OpenXRMarkerTracker</code>, <code>XRAnchor3D</code></li>
+                        <li><strong>Use cases:</strong> MR prototyping, spatial calibration, indoor wayfinding, and robotics reference-frame calibration</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+
         <!-- VR Teleoperation for SO-101 — VRTeleop -->
         <div id="vr-teleop" class="project-panel" style="display:none">
             <section class="content-section project-detail">
@@ -657,6 +711,7 @@ python calibrate.py --follower /dev/ttyACM1</code></pre>
 
     <script>
         const titles = {
+            'qr-code-pose-tracking': '6D Pose Estimation of QR Codes using Godot 4 and OpenXR - Mahmoud Maan',
             'vr-teleop':           'VR Teleoperation for SO-101 — VRTeleop - Mahmoud Maan',
             'vr-hand-bridge':      'VR Hand Pose Tracking to ROS 2 Bridge - Mahmoud Maan',
             'so101-teleoperation': 'SO-101 Robot ARM Teleoperation - Mahmoud Maan',
