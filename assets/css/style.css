@@ -10,6 +10,11 @@
 
 html {
     overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+.page-section {
+    scroll-margin-top: 80px;
 }
 
 :root {
@@ -171,7 +176,6 @@ main {
 
 .content-section {
     padding: 3rem 0 6rem 0;
-    min-height: calc(100vh - 200px);
 }
 
 
@@ -436,6 +440,11 @@ main {
     font-size: 0.85rem;
 }
 
+.projects-see-all {
+    text-align: center;
+    margin-top: 2.5rem;
+}
+
 /* ===========================
    Project Detail Page
    =========================== */
@@ -651,6 +660,26 @@ main {
 
 .btn:hover {
     background-color: var(--link-hover);
+}
+
+/* ===========================
+   Contact Section
+   =========================== */
+
+.contact-section {
+    padding-bottom: 4rem;
+}
+
+.contact-text {
+    font-size: 0.95rem;
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+}
+
+.contact-links {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
 }
 
 /* ===========================
