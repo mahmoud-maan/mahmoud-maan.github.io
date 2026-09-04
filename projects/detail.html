@@ -21,6 +21,131 @@
 
     <main class="container">
 
+        <!-- Balancing Robot Sim-to-Real RL -->
+        <div id="balance-bot-rl" class="project-panel" style="display:none">
+            <section class="content-section project-detail">
+                <a href="../index.html#projects" class="back-link">← Back to Projects</a>
+
+                <h1>Balancing Robot Sim-to-Real RL</h1>
+
+                <div class="project-image-hero">
+                    <img src="../assets/images/balance-bot-RL.gif" alt="Balancing Robot Sim-to-Real RL">
+                </div>
+
+                <div class="project-content">
+                    <h2>Overview</h2>
+                    <p>This project explores how far a reinforcement learning policy trained in simulation can transfer to a real (Sim2Real) self-balancing robot. I used MuJoCo, Gymnasium, and Stable-Baselines3 to train PPO policies, then deployed them to an ESP32-based <a href="https://shop.m5stack.com/products/bala2-fire-self-balancing-robot-kit?variant=43135408701697" target="_blank">M5Stack Bala2 robot</a> using custom Arduino firmware.</p>
+
+                    <h2>What I Did</h2>
+                    <ul>
+                        <li>Studied the robot MJCF model and wrapped the MuJoCo robot into a custom Gymnasium environment.</li>
+                        <li>Defined the observation, action, reward, and termination logic needed for balancing.</li>
+                        <li>Trained a PPO policy with Stable-Baselines3 in simulation without domain randomization.</li>
+                        <li>Evaluated that policy in simulation and got promising balancing behavior.</li>
+                        <li>Exported the trained actor to ONNX and converted it into a C header for embedded inference.</li>
+                        <li>Wrote Arduino firmware to deploy the policy on the real ESP32-based robot.</li>
+                        <li>Compared simulation behavior against real-world behavior and used that gap to guide the next stage of training.</li>
+                        <li>Added a second training setup with domain randomization to improve robustness on hardware.</li>
+                    </ul>
+
+                    <h2>Project Journey</h2>
+
+                    <h3>1. Simulation Environment</h3>
+                    <p>I first focused on understanding the robot model and building an RL environment around it. That meant turning the MuJoCo MJCF model into a Gymnasium environment that Stable-Baselines3 could train on reliably.</p>
+
+                    <h3>2. First PPO Policy</h3>
+                    <p>I trained a PPO policy in MuJoCo without domain randomization. In simulation, the robot balanced well and the results looked good enough to test on the real robot.</p>
+
+                    <a href="https://youtu.be/8seE8rHo6iY" target="_blank" class="project-video-hero" aria-label="Watch MuJoCo simulation on YouTube">
+                        <img src="https://img.youtube.com/vi/8seE8rHo6iY/maxresdefault.jpg" alt="MuJoCo simulation">
+                        <div class="yt-play-btn" aria-hidden="true">
+                            <svg viewBox="0 0 68 48" width="68" height="48">
+                                <path d="M66.5 7.7A8.5 8.5 0 0 0 60.7 2C55.4.5 34 .5 34 .5S12.6.5 7.3 2A8.5 8.5 0 0 0 1.5 7.7C0 13 0 24 0 24s0 11 1.5 16.3A8.5 8.5 0 0 0 7.3 46C12.6 47.5 34 47.5 34 47.5s21.4 0 26.7-1.5a8.5 8.5 0 0 0 5.8-5.7C68 35 68 24 68 24s0-11-1.5-16.3z" fill="#ff0000"/>
+                                <path d="M27 34l18-10-18-10v20z" fill="#fff"/>
+                            </svg>
+                        </div>
+                    </a>
+                    <p class="video-caption"><em>MuJoCo simulation</em></p>
+
+                    <h3>3. First Real Deployment</h3>
+                    <p>I deployed that first policy to the real M5Stack Bala2 running on the ESP32. The robot could balance, which was a strong sign that sim-to-real transfer was working at least partially.</p>
+                    <p>At the same time, the real robot exposed the limits of the first policy:</p>
+                    <ul>
+                        <li>It was not robust to pushes.</li>
+                        <li>It sometimes accelerated forward too aggressively and then fell.</li>
+                        <li>Small differences between simulation and hardware were enough to break stability.</li>
+                    </ul>
+                    <p>Sim-to-real showed that a policy trained in simulation can work on the real robot, but the real robot clearly exposed a gap between the simulator and reality. Domain randomization was my next step to make the policy more robust to that gap.</p>
+
+                    <a href="https://youtu.be/hKXrO79v1es" target="_blank" class="project-video-hero" aria-label="Watch basic deployed policy on YouTube">
+                        <img src="https://img.youtube.com/vi/hKXrO79v1es/maxresdefault.jpg" alt="Basic deployed policy on real robot">
+                        <div class="yt-play-btn" aria-hidden="true">
+                            <svg viewBox="0 0 68 48" width="68" height="48">
+                                <path d="M66.5 7.7A8.5 8.5 0 0 0 60.7 2C55.4.5 34 .5 34 .5S12.6.5 7.3 2A8.5 8.5 0 0 0 1.5 7.7C0 13 0 24 0 24s0 11 1.5 16.3A8.5 8.5 0 0 0 7.3 46C12.6 47.5 34 47.5 34 47.5s21.4 0 26.7-1.5a8.5 8.5 0 0 0 5.8-5.7C68 35 68 24 68 24s0-11-1.5-16.3z" fill="#ff0000"/>
+                                <path d="M27 34l18-10-18-10v20z" fill="#fff"/>
+                            </svg>
+                        </div>
+                    </a>
+                    <p class="video-caption"><em>Basic deployed policy on real robot</em></p>
+
+                    <h3>4. Domain Randomization</h3>
+                    <p>I then trained a domain-randomized policy to make the robot less sensitive to simulation mismatch. The randomization included:</p>
+                    <ul>
+                        <li>Sensor noise</li>
+                        <li>Unknown friction</li>
+                        <li>Motor noise</li>
+                        <li>Tire ridges</li>
+                        <li>Action delay</li>
+                        <li>Battery discharge and voltage droop</li>
+                        <li>Unknown mass and density</li>
+                        <li>Random pushes</li>
+                    </ul>
+                    <p>After deploying the domain-randomized policy, the robot behaved much better and looked noticeably more stable in the real world.</p>
+
+                    <a href="https://youtu.be/FoIdwt4WjeA" target="_blank" class="project-video-hero" aria-label="Watch domain-randomized policy on YouTube">
+                        <img src="https://img.youtube.com/vi/FoIdwt4WjeA/maxresdefault.jpg" alt="Domain-randomized policy on real robot">
+                        <div class="yt-play-btn" aria-hidden="true">
+                            <svg viewBox="0 0 68 48" width="68" height="48">
+                                <path d="M66.5 7.7A8.5 8.5 0 0 0 60.7 2C55.4.5 34 .5 34 .5S12.6.5 7.3 2A8.5 8.5 0 0 0 1.5 7.7C0 13 0 24 0 24s0 11 1.5 16.3A8.5 8.5 0 0 0 7.3 46C12.6 47.5 34 47.5 34 47.5s21.4 0 26.7-1.5a8.5 8.5 0 0 0 5.8-5.7C68 35 68 24 68 24s0-11-1.5-16.3z" fill="#ff0000"/>
+                                <path d="M27 34l18-10-18-10v20z" fill="#fff"/>
+                            </svg>
+                        </div>
+                    </a>
+                    <p class="video-caption"><em>Domain-randomized policy on real robot</em></p>
+
+                    <h2>Pipeline</h2>
+                    <ol>
+                        <li>Study the MuJoCo robot model and build a custom Gymnasium environment.</li>
+                        <li>Train a PPO balancing policy in simulation with Stable-Baselines3.</li>
+                        <li>Evaluate the learned policy in MuJoCo.</li>
+                        <li>Export the actor network to ONNX.</li>
+                        <li>Convert the ONNX actor into a self-contained C header.</li>
+                        <li>Integrate the generated header into Arduino firmware.</li>
+                        <li>Flash the firmware to the ESP32 robot and test on real hardware.</li>
+                    </ol>
+
+                    <h2>Tools</h2>
+                    <ul>
+                        <li><strong>Simulation:</strong> MuJoCo, Gymnasium</li>
+                        <li><strong>Training:</strong> Stable-Baselines3 (PPO)</li>
+                        <li><strong>Deployment:</strong> ONNX, Arduino, ESP32</li>
+                        <li><strong>Hardware:</strong> M5Stack Bala2 self-balancing robot kit</li>
+                        <li><strong>Tooling:</strong> uv, Python</li>
+                    </ul>
+
+                    <h2>Inspiration</h2>
+                    <p>I learned a lot from Shawn Hymel's reinforcement learning series and blog posts, especially his balance robot work:</p>
+                    <ul>
+                        <li><a href="https://shawnhymel.com/tag/reinforcement-learning/" target="_blank">Shawn Hymel — Reinforcement Learning posts</a></li>
+                        <li><a href="https://shawnhymel.com/3219/an-idea-im-exploring-reinforcement-learning-for-a-balance-robot/" target="_blank">Shawn Hymel — Reinforcement Learning for a Balance Robot</a></li>
+                    </ul>
+
+                    <h2>Next Step</h2>
+                    <p>I am currently working on adding command inputs to control the robot and exploring reinforcement learning with goal-conditioned policies.</p>
+                </div>
+            </section>
+        </div>
+
         <!-- VLM Fine-tuning -->
         <div id="vlm-finetuning" class="project-panel" style="display:none">
             <section class="content-section project-detail">
@@ -712,6 +837,7 @@ python calibrate.py --follower /dev/ttyACM1</code></pre>
 
     <script>
         const titles = {
+            'balance-bot-rl':    'Balancing Robot Sim-to-Real RL - Mahmoud Maan',
             'qr-code-pose-tracking': '6D Pose Estimation of QR Codes using Godot 4 and OpenXR - Mahmoud Maan',
             'vr-teleop':           'VR Teleoperation for SO-101 — VRTeleop - Mahmoud Maan',
             'vr-hand-bridge':      'VR Hand Pose Tracking to ROS 2 Bridge - Mahmoud Maan',
